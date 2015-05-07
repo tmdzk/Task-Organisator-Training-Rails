@@ -1,0 +1,50 @@
+<title>Your todo list</title>
+<div class="container">
+  <div class="row">
+    <h1>welcome to your todo list </h1>
+    <hr/>
+
+    <h2> Add a todo list :<h2>
+    <%= form_for @new_todo, :url => { :action => "add" }  do |f|  %>
+      <%= f.text_field  :todo_item %>
+      <%= f.submit "Add todo", class: "btn btn-primary" %>
+    <%end%>
+
+    <hr/>
+
+    <% if flash[:error] %>
+      <div class="alert alert-error">
+      <button type="button" class="close" data-dismiss="alert">×</button>
+      <strong><%= flash[:error] %></strong>
+      </div>
+    <% end %>
+
+    <% if flash[:success] %>
+      <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert">×</button>
+        <strong><%= flash[:success]%></strong>
+      </div>
+    <% end %>
+  
+    <p>Your List (Please check done tasks) :</p>
+      <div class="well">
+        <%= form_tag("/todos/complete/", :method => "post") do %>
+          <ul style="list-style-type:none;">
+    		  <% @todo_items.each do |t| %> 
+          <h3><li> 
+        <% if t.completed == true %>
+          <strike><%= t.todo_item %></strike> DONE !</li>
+      	<% else %>
+          <li> <%= check_box_tag  "todos_checkbox[]",t.id %> <%= t.todo_item %></li>
+      	<% end %>
+    	<%end%>
+    </ul>
+
+	   <%= submit_tag("Complete Todos", :class=>"btn btn-success") %>
+    <%end %>
+
+  <a href="/todos/delete">Delete last todo</a>
+
+     </div> <!-- well -->
+  </div> <!-- row -->
+</div> <!-- container -->
